@@ -2,7 +2,7 @@
 
 **This is a submittion for the [DEV Pinata challenge](https://dev.to/devteam/join-us-for-the-the-pinata-challenge-3000-in-prizes-59cb).**
 
-[Live_iy]() is an application designed to bring photos to life. It leverages the use of a Pinata for image file uploads and live-portrait api to transform images to live videos.
+[Live_iy](https://live-iy.netlify.app/) is an application designed to bring photos to life. It leverages the use of a Pinata for image file uploads and live-portrait api to transform images to live videos.
 
 ### Demo
 
