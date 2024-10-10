@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+// Colors
+$Lime-green: hsl(163, 72%, 41%);
+$Bright-red: hsl(356, 69%, 56%);
+$Dark-cyan-blue: hsl(208, 92%, 53%);
+$Light-cyan-blue: hsl(203, 89%, 53%);
+$Gradient-yellow-pink: linear-gradient(hsl(37, 97%, 70%), hsl(329, 70%, 58%));
+$Strawberry-red: hsl(348, 97%, 39%);
+
+$Light-theme-toggle: hsl(230, 22%, 74%);
+$White: hsl(0, 0%, 100%);
+$Very-pale-blue: hsl(225, 100%, 98%);
+$Light-grayish-blue: hsl(227, 47%, 96%);
+$Dark-grayish-blue: hsl(228, 12%, 44%);
+$Very-dark-blue: hsl(230, 17%, 14%);
+
+$Dark-theme-toggle: linear-gradient(hsl(210, 78%, 56%), hsl(146, 68%, 55%));
+$Very-deep-dark-blue: hsl(232, 19%, 15%);
+$Dark-desaturated-blue: hsl(228, 28%, 20%);
+$Desaturated-blue: hsl(228, 34%, 66%);
+
+// Typography
+$F-Size: 15px;
+$F-Family: 'Roboto', sans-serif;
+
+// General styles
+$hover-scale: scale(1.05);
+$bdr-rds: 4px;
+$trans-time: ease .5s;
+
+
+:root {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  // Light Theme
+  --bg-color: #{$White};
+  --text-color: #{$Dark-grayish-blue};
+  --faint-text: #{$Dark-grayish-blue};
+}
+
+// Dark Theme
+.dark-theme {
+  --bg-color: #{$Very-deep-dark-blue};
+  --text-color: #{$White};
+  --faint-text: #{$Desaturated-blue};
+}
