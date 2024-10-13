@@ -1,0 +1,16 @@
+@import '../variables';
+
+footer {
+  width: 100%;
+  padding: 50px;
+  text-align: center;
+  display: grid;
+  align-items: center;
+  word-spacing: 5px;
+  background-color: var(--bg-color);
+  box-shadow: 0 -5px 15px var(--bx-shadow);
+
+  p {
+    color: var(--faint-text);
+  }
+}

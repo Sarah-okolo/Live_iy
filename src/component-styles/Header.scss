@@ -1,0 +1,60 @@
+@import '../variables';
+
+header {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px $HPaddin;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 500;
+}
+
+#logo {
+  display: flex;
+  text-decoration: none;
+  color: var(--text-color);
+
+  img {
+    width: 60px;
+    object-fit: contain;
+    aspect-ratio: 1/1;
+
+  }
+
+  #logo-name {
+    font-size: 1.8rem;
+    font-weight: 900;
+    margin: auto 0;
+    text-align: center;
+  }
+}
+
+#theme-toggle-btn {
+  width: 54px;
+  height: 29px;
+  border-radius: 25px;
+  background: var(--btns-bg);
+  position: relative;
+  margin-right: 20px;
+  padding: 4px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.slider {
+  width: 50%;
+  height: 100%;
+  border-radius: 50%;
+  aspect-ratio: 1/1;
+  box-shadow: 0 0 5px var(--bx-shadow);
+  background: var(--bg-color);
+  transition: transform $trans-time;
+}
+
+.slide {
+  transform: translateX(100%);
+}

@@ -1,0 +1,318 @@
+@import '../variables';
+
+h2 {
+  margin-bottom: 20px;
+  font-size: 2.3rem;
+  text-align: center;
+}
+h3 {
+  text-align: center;
+}
+
+#edit-img-page {
+  padding: 5.2rem 1.5rem 0;
+}
+
+#edit-container {
+  min-height: 90vh;
+
+  h2 {
+    opacity: .9;
+    margin-bottom: 30px;
+  }
+}
+
+.other-btn {
+  display: block;
+  margin: 40px auto;
+  font-size: 1.15rem;
+  padding: 16px 21px;
+  background: $Gradient-orange-blue;
+  border: 2px dotted;
+  border-radius: 5px;
+  color: var(--btns-clr);
+  width: 30%;
+  min-width: max-content;
+  max-width: 30rem;
+  text-align: center;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform .5s ease;
+  box-shadow: 5px 5px 10px var(--bx-shadow);
+
+  ion-icon {
+    position: relative;
+    top: 2.2px;
+    margin-left: 5px;
+  }
+    
+    &:hover{
+      transform: scale(1.13);
+    }
+}
+
+.upld-btn {
+  background-color: transparent;
+  background: var(--btns-bg);
+  margin-top: 90px;
+}
+
+#edit-container-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  top: -10px
+}
+
+#image-transform-container {
+  width: 54%;
+  border-right: 3px solid var(--bx-shadow);
+  box-shadow: 5px 0px 15px -10px var(--bx-shadow);
+  padding: 15px 40px 80px;
+
+  .new-img-btn {
+    border: none;
+    border-radius: 5px;
+    background: $Gradient-orange-blue;
+    color: var(--btns-clr);
+    width: 30%;
+    min-width: max-content;
+    max-width: 30rem;
+    padding: 15px;
+    font-size: 1.15rem;
+    text-align: center;
+    font-weight: 600;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform .5s ease;
+    box-shadow: 10px 10px 10px var(--bx-shadow);
+
+    ion-icon {
+      position: relative;
+      top: 2.2px;
+      margin-left: 5px;
+    }
+    
+    &:hover{
+      transform: scale(1.1);
+    }
+  }
+  
+  #image-diff-wrapper {
+    width: 29rem;
+    aspect-ratio: 1/.8;
+    object-fit: contain;
+    overflow: hidden;
+    margin: 25px auto;
+    position: relative;
+
+    img {
+      width: 100%;
+      object-fit: contain;
+      aspect-ratio: 1/.8;
+    }
+
+    #generating-loader {
+      width: 100%;
+      height: 100%;
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: url('../images/sparkle.gif');
+      background-size: cover;
+      background-color: transparentize($color: #000000, $amount: .2);
+      z-index: 100;
+      text-align: center;
+
+      p {
+        line-height: 33px;
+        font-size: 1.2rem;
+        color: $White;
+        margin-top: 30%;
+      }
+    }
+  }
+  
+  .to-life-btn {
+    margin-left: 35%;
+  }
+}
+
+#properties-container {
+  width: 45%;
+  padding: 5px 15px;
+  text-align: center;
+  position: relative;
+
+  h3 {
+    margin: 0 0 20px;
+    font-size: 1.5rem;
+    
+  }
+
+  p {
+    color: var(--very-faint-text);
+  }
+
+  #reference-video-container {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 300;
+    padding: 0 40px;
+    text-align: center;
+    background-color: var(--bg-color);
+
+    h3 {
+      background: $Gradient-yellow-pink;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p {
+      margin: 15px 0;
+    }
+
+    .other-btn {
+      margin: 0 auto;
+      padding: 10px 12px;
+      font-size: 1.05rem;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  #ref-video {
+    width: 25rem;
+    aspect-ratio: 1/.8;
+    object-fit: contain;
+    overflow: hidden;
+    margin: 25px auto;
+  }
+
+  
+}
+
+
+//Image upload page
+.upload-container {
+  scrollbar-width: none;
+}
+.upload-container::-webkit-scrollbar {
+  display: none;
+}
+
+.upload-container {
+  width: 100%;
+  height: 100vh;
+  padding: 5.3rem 1.5rem 0;
+  position: fixed;
+  z-index: 400;
+  background-color: var(--bg-color);
+  top: 0;
+  left: 0;
+  gap: 0;
+  text-align: center;
+  overflow-y: auto;
+
+  h2 {
+    background: var(--btns-bg);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+#upload-wrapper {
+  width: 32rem;
+  display: grid;
+  gap: 25px;
+  margin: 0 auto;
+  padding: 30px 30px 60px;
+  text-align: center;
+
+  .drag-drop-box {
+    width: 100%;
+    height: 15rem;
+    background-image: url('../images/colorful-bubbles.png');
+    border-radius: 10px;
+    background-position: 10px 45px;
+
+    .glass-wrapper {
+      width: 100%;
+      height: 100%;
+      padding: 30px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      cursor: crosshair;
+      border-radius: 20px;
+      border: 3px dashed var(--very-faint-text);
+      backdrop-filter: blur(80px);
+      -webkit-backdrop-filter:blur(80px);
+
+      h3 {
+        margin: 30px 0 10px;
+      }
+    }
+
+    ion-icon {
+      font-size: 2.4rem;
+      color: rgb(119, 161, 21);
+      position: relative;
+      top: 10px;
+    }
+
+    h3 {
+      font-size: 1.8rem;
+      color: var(--faint-text);
+      opacity: .9;
+    }
+  }
+  
+  p {
+    color: var(--very-faint-text);
+  }
+  
+  .upload-image-btn {
+    width: 75%;
+    padding: 13px 10px;
+    border-radius: 25px;
+  }
+}
+
+.display-live-portrait {
+  z-index: 450;
+  padding: 5rem 0;
+  display: none;
+
+  #live-portrait-wrapper {
+    background: url('../images/glitter.png');
+  }
+
+  h2 {
+    background: linear-gradient( to top left, hsl(331, 80%, 52%) 20%, hsl(146, 68%, 55%), hsl(208, 92%, 53%), hsl(20, 81%, 49%));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  video {
+    margin: 3rem auto;
+    width: 50%;
+    aspect-ratio: 1/.5;
+    object-fit: contain;
+    overflow: hidden;
+  }
+}

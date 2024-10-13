@@ -1,6 +1,5 @@
 @import './variables';
 
-
 *, *::before, *::after {
   margin: 0;
   padding: 0;
@@ -8,7 +7,193 @@
 }
 
 body {
-  padding: 0 20px;
   font-family: $F-Family;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
+.highlight {
+  color: $Purplish-pink;
+}
+
+.glass-effect {
+  backdrop-filter: blur(50px);
+  -webkit-backdrop-filter:blur(50px);
+}
+
+#root {
+  max-width: 1600px;
+  margin: 0 auto;
+  position: relative;
+}
+
+p {
+  color: var(--text-color);
+}
+
+.faint-text {
+  color: var(--faint-text);
+}
+
+button {
+  outline: none;
+}
+
+.btns{
+  width: 30%;
+  min-width: max-content;
+  max-width: 30rem;
+  padding: 18px 15px;
+  font-size: 1.15rem;
+  text-align: center;
+  border-radius: 20px;
+  border: 8px solid;
+  border-image: var(--btns-bg);
+  color: $White;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: .5s;
+  z-index: 10;
+  margin: 0 auto;
+  background: transparent;
+  text-wrap: nowrap;
+  outline: none;
+
+  &:hover{
+    transform: scale(1.1);
+    color: var(--btns-hv-clr);
+  }
+  
+  color: var(--btns-clr);
+
+  &::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 100%;
+    background: var(--btns-bg);
+    z-index: -2;
+    transition: .5s;
+  }
+
+  &:hover::before{
+    width: 5%;
+  }
+
+  &::after{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 51%;
+    height: 100%;
+    background:var(--btns-bg);
+    z-index: -2;
+    transition: .5s;
+  }
+  
+  &:hover::after{
+    width: 5%;
+  }
+}
+
+.alert-box {
+  width: 250px;
+  color: $White;
+  font-weight: bolder;
+  padding: 10px;
+  border-radius: $bdr-rds;
+  box-shadow: 0 0 5px var(--bx-shadow);
+  text-align: center;
+  position: fixed;
+  top: -80px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  overflow: hidden;
+  z-index: 900;
+  overflow: visible;
+
+
+  &::before {
+    content: '';
+    width: 5px;
+    height: 50px;
+    background-color: inherit;
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    z-index: 300;
+  }
+}
+
+.reveal {
+  animation: drop 1s ease-in-out 1 forwards;
+}
+
+@keyframes drop {
+  0% {
+    top: -80px;
+    transform: rotate(0deg);
+  }
+  30% {
+    top: 15px;
+    transform: rotate(20deg);
+  }
+  40% {
+    top: 5px;
+  }
+  50% {
+    top: 20px;
+  }
+  70% {
+    transform: rotate(-20deg);
+    top: 22px;
+  }
+  100% {
+    top: 25px;
+    transform: rotate(0deg);
+  }
+}
+
+/* Hide the volume control */
+video::-webkit-media-controls-volume-slider,
+video::-webkit-media-controls-mute-button {
+  display: none;
+  pointer-events: none; /* Disable interaction */
+}
+
+/* Disable hover effect on the entire area */
+video::-webkit-media-controls-panel {
+  pointer-events: auto; /* Re-enable pointer events for other controls */
+}
+
+video::-webkit-media-controls-mute-button {
+  display: none;
+}
+
+.loading-icon {
+  width: 5px;
+  height: 5px;
+  aspect-ratio: 1/1;
+  padding: 10px;
+  animation: spin 1s linear infinite;
+  border-radius: 50%;
+  border: 2px solid;
+  border-right: none;
+  text-align: center;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+} 

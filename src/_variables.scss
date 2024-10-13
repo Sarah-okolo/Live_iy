@@ -2,22 +2,27 @@
 
 // Colors
 $Lime-green: hsl(163, 72%, 41%);
-$Bright-red: hsl(356, 69%, 56%);
+$Bright-red: hsl(356, 61%, 47%);
 $Dark-cyan-blue: hsl(208, 92%, 53%);
 $Light-cyan-blue: hsl(203, 89%, 53%);
-$Gradient-yellow-pink: linear-gradient(hsl(37, 97%, 70%), hsl(329, 70%, 58%));
+$Purplish-pink: hsl(331, 80%, 52%);
+$Light-purplish-pink: hsla(330, 34%, 45%, 0.315);
 $Strawberry-red: hsl(348, 97%, 39%);
+$Dark-orange: rgb(255, 89, 0);
+$Gradient-yellow-pink: linear-gradient(hsl(29, 78%, 74%), hsl(331, 80%, 52%));
+$Gradient-light-blue-green: linear-gradient(hsl(210, 78%, 56%), hsl(146, 68%, 55%));
+$Gradient-orange-blue: linear-gradient(to bottom right, hsl(31, 77%, 52%), hsl(210, 78%, 56%));
 
-$Light-theme-toggle: hsl(230, 22%, 74%);
+$Light-gray: hsl(230, 22%, 74%);
 $White: hsl(0, 0%, 100%);
-$Very-pale-blue: hsl(225, 100%, 98%);
+$Very-pale-blue: hsl(229, 30%, 93%);
 $Light-grayish-blue: hsl(227, 47%, 96%);
 $Dark-grayish-blue: hsl(228, 12%, 44%);
 $Very-dark-blue: hsl(230, 17%, 14%);
 
-$Dark-theme-toggle: linear-gradient(hsl(210, 78%, 56%), hsl(146, 68%, 55%));
 $Very-deep-dark-blue: hsl(232, 19%, 15%);
 $Dark-desaturated-blue: hsl(228, 28%, 20%);
+$Light-desaturated-blue: hsla(229, 34%, 26%, 0.507);
 $Desaturated-blue: hsl(228, 34%, 66%);
 
 // Typography
@@ -26,8 +31,9 @@ $F-Family: 'Roboto', sans-serif;
 
 // General styles
 $hover-scale: scale(1.05);
-$bdr-rds: 4px;
+$bdr-rds: 12px;
 $trans-time: ease .5s;
+$HPaddin: 15px;
 
 
 :root {
@@ -35,16 +41,32 @@ $trans-time: ease .5s;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
 
   // Light Theme
   --bg-color: #{$White};
-  --text-color: #{$Dark-grayish-blue};
+  --text-color: #{$Very-deep-dark-blue};
   --faint-text: #{$Dark-grayish-blue};
+  --bx-shadow: #{$Very-pale-blue};
+  --btns-bg: #{$Gradient-yellow-pink};
+  --btns-clr: #{$White};
+  --btns-hv-clr: #{$Very-deep-dark-blue};
+  --img-bx-shadow: #{$Dark-grayish-blue};
+  --card-bg: #{$Light-purplish-pink};
+  --very-faint-text: #{$Light-gray};
+  --gradient-bdr: linear-gradient( to top left, hsl(331, 80%, 52%), hsl(146, 68%, 55%), hsl(208, 92%, 53%), hsl(20, 81%, 49%));
 }
 
 // Dark Theme
 .dark-theme {
   --bg-color: #{$Very-deep-dark-blue};
   --text-color: #{$White};
-  --faint-text: #{$Desaturated-blue};
+  --faint-text: #{$Light-grayish-blue};
+  --bx-shadow: #{$Dark-desaturated-blue};
+  --btns-bg: #{$Gradient-light-blue-green};
+  --btns-clr: #{$Very-deep-dark-blue};
+  --btns-hv-clr: #{$White};
+  --img-bx-shadow: #{$Dark-desaturated-blue};
+  --card-bg: #{$Light-desaturated-blue};
+  --very-faint-text: #{$Dark-grayish-blue};
 }
