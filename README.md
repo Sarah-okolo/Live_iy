@@ -6,7 +6,10 @@
 
 ### Demo
 
-  ![Site demo]()
+  ![Site home page](/public/images/demo1.png);
+  ![Site upload page](/public/images/demo2.png);
+  ![Site transform page](/public/images/demo3.png);
+
 
 ## Built with
 
