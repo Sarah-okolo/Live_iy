@@ -14,3 +14,13 @@ footer {
     color: var(--faint-text);
   }
 }
+
+@media screen and (max-width: 1100px) {
+  footer {
+    padding: 40px 20px;
+    
+    p {
+      font-size: .75rem
+    }
+  }
+}

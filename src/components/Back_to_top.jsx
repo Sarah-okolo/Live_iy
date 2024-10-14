@@ -23,6 +23,10 @@ function Back_to_top() {
         top: 0,
         behavior: 'smooth'
     });
+    document.body.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+  });
     }} ref={topBtnRef} style={{
       width: '0',
       aspectRatio: '1/1',
@@ -30,7 +34,7 @@ function Back_to_top() {
       visibility: 'hidden',
       padding: '17px',
       borderRadius: '50%',
-      position: 'absolute',
+      position: 'fixed',
       bottom: '20px',
       right: '30px',
       border: 'none',

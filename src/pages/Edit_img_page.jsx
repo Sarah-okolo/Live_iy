@@ -30,7 +30,6 @@ function Edit_img_page() {
 
   const randomRefVideos = [
     '/ref_videos/ref-vid1.mp4',
-    '/ref_videos/ref-vid2.mp4',
     '/ref_videos/ref-vid3.mp4',
     '/ref_videos/ref-vid4.mp4',
     '/ref_videos/ref-vid5.mp4',
@@ -57,7 +56,6 @@ function Edit_img_page() {
 
   // Handles uploading of files to Pinata
   const handleFileUploadToPinata = async (file) => {
-    alertBox.current.classList.remove('reveal');
     setIsImgFileLoading(true);
     try {
       const upload = await pinata.upload.file(file);
@@ -221,8 +219,6 @@ function Edit_img_page() {
           throw new Error(`Error: ${response.statusText}`);
         }
         
-
-
         const result = await response.blob();
         setLivePortraitData(result);
         console.log(result);
@@ -255,13 +251,26 @@ function Edit_img_page() {
 
   // Handles the reference video upload or change
   const handleRefVideoChange = (event) => {
-    alertBox.current.classList.remove('reveal');
-    setRefVideoData(event.target.files[0]); // Store the selected file in state
+    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
+    if (event.target.files[0].size <= MAX_FILE_SIZE) {
+      setRefVideoData(event.target.files[0]); // Store the selected file in state
+    }
+    else {
+      event.target.value = ""; // Clear the file input
+      alertBox.current.innerHTML = 'File size exceeds 5MB';
+      alertBox.current.classList.add('reveal');
+      alertBox.current.style.backgroundColor = 'hsl(356, 58%, 52%)';
+      setTimeout(() => {
+        alertBox.current.classList.remove('reveal');
+      }, 4000);
+      return;
+    }
   };
 
 
   // Updates the reference video when a new video is selected and uploads it to Pinata
   useEffect(() => {
+    alertBox.current.classList.remove('reveal');
     if (refVideoData) {
       setIsRdmVidLoading(true);
       const uploadRefVid = async () => {
