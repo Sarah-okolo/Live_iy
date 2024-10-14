@@ -376,7 +376,7 @@ function Edit_img_page() {
         <div className="display-live-portrait upload-container" ref={LivePortraitContRef}>
           <h2>Your live portrait is readyyy!</h2>
           <div id="live-portrait-wrapper">
-            <video src="/ref_videos/ref-vid1.mp4" controls autoPlay loop muted id='live-portrait' ref={liveVidDisplayRef}></video>
+            <video src="" controls autoPlay loop muted id='live-portrait' ref={liveVidDisplayRef}></video>
           </div>
           <button className='btns' ref={downloadLiveVidRef} onClick={handleDownload}>Download <ion-icon name="download-outline"></ion-icon></button>
         </div>
