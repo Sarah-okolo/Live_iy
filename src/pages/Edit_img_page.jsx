@@ -57,6 +57,7 @@ function Edit_img_page() {
 
   // Handles uploading of files to Pinata
   const handleFileUploadToPinata = async (file) => {
+    alertBox.current.classList.remove('reveal');
     setIsImgFileLoading(true);
     try {
       const upload = await pinata.upload.file(file);
