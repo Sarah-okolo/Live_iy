@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import '../component-styles/Edit_img_page.scss';
+import { PinataSDK } from "pinata";
+import { u } from 'framer-motion/client';
 
 
 function Edit_img_page() {
@@ -7,7 +9,10 @@ function Edit_img_page() {
   const [fileData, setFileData] = useState(null);
   const [refVideoData, setRefVideoData] = useState(null);
   const [isRdmVidLoading, setIsRdmVidLoading] = useState(false);
+  const [isImgFileLoading, setIsImgFileLoading] = useState(false);
   const [livePortraitData, setLivePortraitData] = useState(null);
+  const [uploadedImgUrl, setuploadedImgUrl] = useState(null);
+  const [uploadedRefVideoUrl, setuploadedRefVideoUrl] = useState(null);
 
   const uploadContainerRef = useRef(null);
   const editContainerRef = useRef(null);
@@ -38,24 +43,68 @@ function Edit_img_page() {
     generatingLoaderRef.current.style.display = "none";
   };
 
-  const uploadImage = () => {
-    if (fileData) {
-      // TODO: Add logic to upload the image to IPFS using Pinata to create a permanent URL
-      uploadContainerRef.current.style.display = 'none';
-      imageFileDisplay.current.src = URL.createObjectURL(fileData); // Creates a temporary blob URL that displays the file.
-      imageFileDisplay.current.alt = fileData.name;
-    }
-  };
-
   const handleFileChange = (event) => {
     setFileData(event.target.files[0]); // Store the selected file in state
   };
 
-  useEffect(() => {
-    if (fileData) {
-      uploadImage(); // Trigger upload when fileData is updated
+  // Pinata SDK
+  const pinata = new PinataSDK({
+    pinataJwt: import.meta.env.VITE_PINATA_JWT,
+    pinataGateway: import.meta.env.VITE_PINATA_GATEWAY,
+  });
+
+  // Handles uploading of files to Pinata
+  const handleFileUploadToPinata = async (file) => {
+    setIsImgFileLoading(true);
+    try {
+      // const upload = await pinata.upload.file(file);
+      console.log(upload);
+
+      // Create a signed URL for the uploaded file that expires after 30 minutes
+      const signedUrl = await pinata.gateways.createSignedURL({
+        cid: upload.cid,
+        expires: 1800
+      })
+      const CID = signedUrl;
+
+      alertBox.current.innerHTML = 'File uploaded';
+      alertBox.current.classList.add('reveal');
+      alertBox.current.style.backgroundColor = 'hsl(163, 72%, 41%)';
+      setTimeout(() => {
+        alertBox.current.classList.remove('reveal');
+      }, 4000);
+      setIsImgFileLoading(false);
+      uploadContainerRef.current.style.display = 'none';
+
+      return CID;
+    } 
+    catch (error) {
+      alertBox.current.innerHTML = error.message ? error.message : `An error occured<br/>(Please try again)`;
+      alertBox.current.classList.add('reveal');
+      alertBox.current.style.backgroundColor = 'hsl(356, 58%, 52%)';
+      console.log(error)
+      setIsImgFileLoading(false);
+      setIsRdmVidLoading(false);
     }
+  }
+
+  useEffect(() => {
+    alertBox.current.classList.remove('reveal');
+    const uploadFile = async () => {
+      if (fileData) {
+        const imageCID = await handleFileUploadToPinata(fileData); // Await the promise
+        setuploadedImgUrl(imageCID); // Store the uploaded image URL
+      }
+    };
+    uploadFile(); // Call the inner async function
   }, [fileData]);
+
+  useEffect(() => {
+    if (uploadedImgUrl) {
+      imageFileDisplay.current.src = uploadedImgUrl;
+      imageFileDisplay.current.alt = fileData.name;
+    }
+  }, [uploadedImgUrl]);
 
   useEffect(() => {
     // Fires when dragging over the dropbox
@@ -108,8 +157,9 @@ function Edit_img_page() {
   }, []);
 
 
+
   // Segmind API
-  const segmind_api_key = 'SG_66815f2b25931f21';
+  const segmind_api_key = import.meta.env.VITE_SEGMIND_API_KEY;
   const segmind_url = "https://api.segmind.com/v1/live-portrait";
   const segmind_options = {
     method: 'POST',
@@ -120,9 +170,9 @@ function Edit_img_page() {
     body: null
   };
 
-  // Generates the live image from the static image and reference video using the Segmind API
+  // Generates the live image from the static image and reference video file urls using the Segmind API
   const generateLiveImage = async () => {
-    if (fileData && refVideoData) {
+    if (uploadedImgUrl && uploadedRefVideoUrl) {
       generatingLoaderRef.current.style.display = 'block';
       alertBox.current.classList.remove('reveal');
       try {
@@ -138,12 +188,10 @@ function Edit_img_page() {
           });
         }
 
-        // TODO: Retrieve the uploaded image and ref video from IPFS using Pinata and use the URL instead of the file
-
-        const faceImageBase64 = await toB64('https://segmind-sd-models.s3.amazonaws.com/display_images/liveportrait-input.jpg');
+        const faceImageBase64 = await toB64(uploadedImgUrl);
         const data = {
           "face_image":  faceImageBase64,
-          "driving_video": 'https://segmind-sd-models.s3.amazonaws.com/display_images/liveportrait-video.mp4',
+          "driving_video": uploadedRefVideoUrl,
           "live_portrait_dsize": 512,
           "live_portrait_scale": 2.3,
           "video_frame_load_cap": 128,
@@ -197,39 +245,79 @@ function Edit_img_page() {
     }
   }, [livePortraitData]);
 
+
   // Handles the reference video upload or change
   const handleRefVideoChange = (event) => {
     alertBox.current.classList.remove('reveal');
     setRefVideoData(event.target.files[0]); // Store the selected file in state
   };
-  // TODO: upload the video to pinata whenever the RefVideoData state changes
 
-  // Updates the reference video when a new video is selected
+
+  // Updates the reference video when a new video is selected and uploads it to Pinata
   useEffect(() => {
     if (refVideoData) {
-      refvideoRef.current.src = typeof refVideoData === 'string'
-        ? refVideoData  // Use URL for random video
-        : URL.createObjectURL(refVideoData); // Use blob URL for uploaded video
+      const uploadRefVid = async () => {
+        const refVidCID = await handleFileUploadToPinata(refVideoData);
+        setuploadedRefVideoUrl(refVidCID); // Store the uploaded reference video URL
+      };
+      uploadRefVid();
+    }
+  }, [refVideoData]);
+
+  // Display the reference video when the uploadedRefVideoUrl state changes
+  useEffect(() => {
+    if (uploadedRefVideoUrl) {
+      console.log(uploadedRefVideoUrl);
+      // Display the reference video only after it has been uploaded
+      refvideoRef.current.src = uploadedRefVideoUrl;
       refVidContRef.current.style.display = 'block';
       setIsRdmVidLoading(false);
     }
-  }, [refVideoData]);
+  }, [uploadedRefVideoUrl]);
 
 
   // Generates a random reference video
   const generateRandomVid = (e) => {
     setIsRdmVidLoading(true);
     try {
-      const randomVid = randomRefVideos[Math.floor(Math.random() * randomRefVideos.length)]; // TODO: remove when using pinata
-
-      // TODO: Retrieve random video file from pinata and store in state below instead of the URL
-        setRefVideoData(randomVid); // Update state with the random video URL
+      const randomVid = randomRefVideos[Math.floor(Math.random() * randomRefVideos.length)];
+      // Fetch the file as a Blob, then convert it into a File object
+      fetch(randomVid)
+      .then(res => res.blob())
+      .then(blob => {
+        const randomVidFileObject = new File([blob], randomVid.split('/').pop(), { type: blob.type });
+        setRefVideoData(randomVidFileObject); // Update state with the random video URL
+      })
+      .catch(error => console.error('Error:', error))
     } 
     catch (error) {
       alertBox.current.innerHTML = error.message;
       alertBox.current.classList.add('reveal');
       alertBox.current.style.backgroundColor = 'hsl(356, 58%, 52%)';
       setIsRdmVidLoading(false);
+    }
+  };
+
+  const handleDownload = () => {
+    const videoElement = liveVidDisplayRef.current; // Get the video element
+    if (videoElement) {
+      const videoSrc = videoElement.src; // Get the source of the video
+      if (videoSrc) {
+        const a = document.createElement('a');
+        a.href = videoSrc; // Set the href to the video source
+        console.log(videoSrc);
+        a.download = 'live_portrait_video.mp4'; // Specify the default filename
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        alertBox.current.innerHTML = 'File downloaded successfully';
+        alertBox.current.classList.add('reveal');
+        alertBox.current.style.backgroundColor = 'hsl(163, 72%, 41%)';
+        setTimeout(() => {
+          alertBox.current.classList.remove('reveal');
+        }, 3000);
+      }
+      LivePortraitContRef.current.style.display = 'none'; // Hide the video container
     }
   };
 
@@ -262,17 +350,22 @@ function Edit_img_page() {
               />
               <div id="reference-video-container" ref={refVidContRef}>
                 <h3>Reference Video</h3>
-                <video src="" controls muted id='ref-video' ref={refvideoRef}></video>
-                <button className='other-btn chng-vid' onClick={() => refVideoInputRef.current.click()}>Change video</button>
+                <video src="" controls muted loop autoPlay id='ref-video' ref={refvideoRef}></video>
+                <button className='other-btn chng-vid' onClick={() => refVideoInputRef.current.click()}>
+                  {isRdmVidLoading ? <div className='loading-icon'></div> : <>Change video</>}
+                </button>
                 <p>or</p>
                 <button className="other-btn upld-btn genbtn" onClick={(e) => generateRandomVid(e)}>
-                {isRdmVidLoading ? <div className='loading-icon'></div> : <>Generate random <ion-icon name="shuffle-outline"></ion-icon></>}
+                  {isRdmVidLoading ? <div className='loading-icon'></div> : <>Generate random <ion-icon name="shuffle-outline"></ion-icon></>}
                 </button>
               </div>
+
               <h3>Select Reference video</h3>
-              <button className="other-btn upld-btn genbtn" onClick={() => refVideoInputRef.current.click()}>Upload Video <ion-icon name="cloud-upload-outline"></ion-icon></button>
+              <button className="other-btn upld-btn genbtn" onClick={() => refVideoInputRef.current.click()}>
+                {isRdmVidLoading ? <div className='loading-icon'></div> : <>Upload Video <ion-icon name="cloud-upload-outline"></ion-icon></>}
+              </button>
               <p>or</p>
-              <button className="other-btn" onClick={(e) => generateRandomVid(e)}> 
+              <button className='other-btn' onClick={(e) => generateRandomVid(e)}> 
                 {isRdmVidLoading ? <div className='loading-icon'></div> : <>Generate random <ion-icon name="shuffle-outline"></ion-icon></>}
               </button>
             </div>
@@ -283,9 +376,9 @@ function Edit_img_page() {
         <div className="display-live-portrait upload-container" ref={LivePortraitContRef}>
           <h2>Your live portrait is readyyy!</h2>
           <div id="live-portrait-wrapper">
-            <video src="" controls muted id='live-portrait' ref={liveVidDisplayRef}></video>
+            <video src="/ref_videos/ref-vid1.mp4" controls autoPlay loop muted id='live-portrait' ref={liveVidDisplayRef}></video>
           </div>
-          <button className='btns' download='' ref={downloadLiveVidRef} onClick={() => LivePortraitContRef.current.style.display='none'}>Download <ion-icon name="download-outline"></ion-icon></button>
+          <button className='btns' ref={downloadLiveVidRef} onClick={handleDownload}>Download <ion-icon name="download-outline"></ion-icon></button>
         </div>
 
 
@@ -313,7 +406,7 @@ function Edit_img_page() {
               onClick={() => fileInputRef.current.click()}
               ref={selectFromFolderRef}
             >
-              Select from folder
+              {isImgFileLoading ? <div className='loading-icon'></div> : <>Select from folder</>}          
             </button>
           </div>
         </div>

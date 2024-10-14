@@ -22,6 +22,11 @@ h3 {
   }
 }
 
+.loading {
+  pointer-events: none; /* Disable pointer events */
+  cursor: not-allowed;
+}
+
 .other-btn {
   display: block;
   margin: 40px auto;
@@ -295,7 +300,7 @@ h3 {
 .display-live-portrait {
   z-index: 450;
   padding: 5rem 0;
-  display: none;
+  // display: none;
 
   #live-portrait-wrapper {
     background: url('../images/glitter.png');
