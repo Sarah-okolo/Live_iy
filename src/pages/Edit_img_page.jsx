@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import '../component-styles/Edit_img_page.scss';
 import { PinataSDK } from "pinata";
-import { u } from 'framer-motion/client';
-import { m } from 'framer-motion';
 
 
 function Edit_img_page() {
