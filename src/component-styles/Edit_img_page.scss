@@ -77,6 +77,11 @@ h3 {
   border-right: 3px solid var(--bx-shadow);
   box-shadow: 5px 0px 15px -10px var(--bx-shadow);
   padding: 15px 40px 80px;
+  
+  #transform-btn-wrapper {
+    width: 100%;
+    text-align: center;
+  }
 
   .new-img-btn {
     border: none;
@@ -88,7 +93,7 @@ h3 {
     max-width: 30rem;
     padding: 15px;
     font-size: 1.15rem;
-    text-align: center;
+    text-align: left;
     font-weight: 600;
     cursor: pointer;
     position: relative;
@@ -112,8 +117,9 @@ h3 {
     aspect-ratio: 1/.8;
     object-fit: contain;
     overflow: hidden;
-    margin: 25px auto;
+    margin: 45px auto;
     position: relative;
+    text-align: center;
 
     img {
       width: 100%;
@@ -144,7 +150,8 @@ h3 {
   }
   
   .to-life-btn {
-    margin-left: 35%;
+    margin: 0 auto;
+    width: 60%;
   }
 }
 
@@ -157,7 +164,6 @@ h3 {
   h3 {
     margin: 0 0 20px;
     font-size: 1.5rem;
-    
   }
 
   p {
@@ -165,29 +171,34 @@ h3 {
   }
 
   #reference-video-container {
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
+    // display: none;
     height: 100%;
-    z-index: 300;
     padding: 0 40px;
     text-align: center;
     background-color: var(--bg-color);
 
     h3 {
+      margin-bottom: 7rem;
+    }
+
+    #rev-vid-h {
       background: $Gradient-yellow-pink;
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
     }
 
     p {
-      margin: 15px 0;
+      margin: 2rem 0;
+    }
+
+    #ref-vid-p {
+      margin: 1rem 0;
     }
 
     .other-btn {
+      width: 60%;
       margin: 0 auto;
       padding: 10px 12px;
       font-size: 1.05rem;
@@ -203,10 +214,8 @@ h3 {
     aspect-ratio: 1/.8;
     object-fit: contain;
     overflow: hidden;
-    margin: 25px auto;
+    margin: 35px auto 45px;
   }
-
-  
 }
 
 
@@ -298,7 +307,7 @@ h3 {
 }
 
 .display-live-portrait {
-  z-index: 450;
+  z-index: 1450;
   padding: 5rem 0;
   display: none;
 
@@ -319,5 +328,156 @@ h3 {
     aspect-ratio: 1/.5;
     object-fit: contain;
     overflow: hidden;
+  }
+}
+
+
+@media screen and (max-width: 1100px) {
+
+  .upload-container {
+
+    h2 {
+      margin: 30px auto;
+    }
+  }
+  
+  #edit-container {
+    min-height: auto;
+
+    h2 {
+      opacity: .9;
+      margin-bottom: 40px;
+    }
+  }
+
+  #edit-container-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #image-transform-container {
+    width: 100%;
+    border-right: none;
+    box-shadow: none;
+    padding: 15px 40px 80px;
+
+    #image-diff-wrapper {
+      width: 28rem;
+      background-color: gray;
+      margin: 45px auto;
+    }
+
+    .to-life-btn {
+      width: 70%;
+    }
+  }
+
+  #properties-container {
+    width: 100%;
+    padding: .5rem 15px 2rem;
+
+    #reference-video-container {
+      height: auto;
+      padding: 0px 10px;
+      margin-bottom: 40px;
+  
+      h3 {
+        margin-bottom: 5rem;
+      }
+
+      #rev-vid-h {
+        margin-bottom: 3rem;
+      }
+  
+      p {
+        margin: 30px 0;
+      }
+  
+    }
+
+    h3 {
+      text-align: left;
+    }
+
+    #ref-video {
+      width: 24rem;
+      margin: 0 auto 45px;
+    }
+  }
+
+  .display-live-portrait {
+  
+    video {
+      width: 75%;
+    }
+  }
+}
+
+
+@media screen and (max-width: 600px) {
+  #edit-img-page {
+    padding: 6.4rem .5rem 0;
+  }
+
+  #image-transform-container {
+    width: 100%;
+    padding: 15px 20px 80px;
+
+    #image-diff-wrapper {
+      width: 100%;
+    }
+
+    .to-life-btn {
+      width: 90%;
+    }
+  }
+
+  #properties-container {
+
+    #reference-video-container {
+      padding: 10px;
+      
+
+      button {
+        width: 80%
+      }
+    }
+
+    #ref-video {
+      width: 95%;
+    }
+  }
+
+  .display-live-portrait {
+  
+    video {
+      width: 90%;
+    }
+  }
+
+  .upload-container {
+
+    h2 {
+      font-size: 2.1rem;
+      margin: 30px auto;
+    }
+  }
+
+  #upload-wrapper {
+    width: 95%;
+    display: grid;
+    gap: 25px;
+    margin: 0 auto;
+    padding: 30px 20px 60px;
+    text-align: center;
+  
+    .drag-drop-box {
+      width: 100%;
+      height: 15rem;
+      background-image: url('../images/colorful-bubbles.png');
+      border-radius: 10px;
+      background-position: 10px 45px;
+    }
   }
 }

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import '../component-styles/Edit_img_page.scss';
 import { PinataSDK } from "pinata";
 import { u } from 'framer-motion/client';
+import { m } from 'framer-motion';
 
 
 function Edit_img_page() {
@@ -35,6 +36,9 @@ function Edit_img_page() {
     '/ref_videos/ref-vid3.mp4',
     '/ref_videos/ref-vid4.mp4',
     '/ref_videos/ref-vid5.mp4',
+    '/ref_videos/ref-vid6.mp4',
+    '/ref_videos/ref-vid7.mp4',
+    '/ref_videos/ref-vid8.mp4',
   ];
 
   const uploadNewImage = () => {
@@ -58,14 +62,13 @@ function Edit_img_page() {
     setIsImgFileLoading(true);
     try {
       const upload = await pinata.upload.file(file);
-      console.log(upload);
-
       // Create a signed URL for the uploaded file that expires after 30 minutes
       const signedUrl = await pinata.gateways.createSignedURL({
         cid: upload.cid,
         expires: 1800
       })
       const CID = signedUrl;
+      console.log(CID)
 
       alertBox.current.innerHTML = 'File uploaded';
       alertBox.current.classList.add('reveal');
@@ -74,6 +77,7 @@ function Edit_img_page() {
         alertBox.current.classList.remove('reveal');
       }, 4000);
       setIsImgFileLoading(false);
+      setIsRdmVidLoading(false);
       uploadContainerRef.current.style.display = 'none';
 
       return CID;
@@ -158,6 +162,8 @@ function Edit_img_page() {
 
 
 
+
+
   // Segmind API
   const segmind_api_key = import.meta.env.VITE_SEGMIND_API_KEY;
   const segmind_url = "https://api.segmind.com/v1/live-portrait";
@@ -216,6 +222,8 @@ function Edit_img_page() {
           throw new Error(`Error: ${response.statusText}`);
         }
         
+
+
         const result = await response.blob();
         setLivePortraitData(result);
         console.log(result);
@@ -256,6 +264,7 @@ function Edit_img_page() {
   // Updates the reference video when a new video is selected and uploads it to Pinata
   useEffect(() => {
     if (refVideoData) {
+      setIsRdmVidLoading(true);
       const uploadRefVid = async () => {
         const refVidCID = await handleFileUploadToPinata(refVideoData);
         setuploadedRefVideoUrl(refVidCID); // Store the uploaded reference video URL
@@ -337,7 +346,9 @@ function Edit_img_page() {
                 </div>
                 <img src="" alt="" ref={imageFileDisplay} />
               </div>
-              <button className="btns to-life-btn" onClick={generateLiveImage}>Transform</button>
+              <div id="transform-btn-wrapper">
+                <button className="btns to-life-btn" onClick={generateLiveImage}>Transform</button>
+              </div>
             </div>
 
             <div id="properties-container">
@@ -349,25 +360,33 @@ function Edit_img_page() {
                 onChange={handleRefVideoChange}
               />
               <div id="reference-video-container" ref={refVidContRef}>
-                <h3>Reference Video</h3>
-                <video src="" controls muted loop autoPlay id='ref-video' ref={refvideoRef}></video>
-                <button className='other-btn chng-vid' onClick={() => refVideoInputRef.current.click()}>
-                  {isRdmVidLoading ? <div className='loading-icon'></div> : <>Change video</>}
-                </button>
-                <p>or</p>
-                <button className="other-btn upld-btn genbtn" onClick={(e) => generateRandomVid(e)}>
-                  {isRdmVidLoading ? <div className='loading-icon'></div> : <>Generate random <ion-icon name="shuffle-outline"></ion-icon></>}
-                </button>
+                { uploadedRefVideoUrl ?
+                  <>
+                    <h3 id='rev-vid-h'>Reference Video</h3>
+                    <video src="" controls muted loop autoPlay id='ref-video' ref={refvideoRef}></video>
+                    <button className='other-btn chng-vid' onClick={() => refVideoInputRef.current.click()}>
+                      {isRdmVidLoading ? <div className='loading-icon'></div> : <>Change video</>}
+                    </button>
+                    <p id='ref-vid-p'>or</p>
+                    <button className="other-btn upld-btn genbtn" onClick={(e) => generateRandomVid(e)}>
+                      {isRdmVidLoading ? <div className='loading-icon'></div> : <>Generate random <ion-icon name="shuffle-outline"></ion-icon></>}
+                    </button>
+                  </>
+                  :
+                  <>
+                    <h3>Select Reference video</h3>
+                    <button className="other-btn upld-btn genbtn" onClick={() => refVideoInputRef.current.click()}>
+                      {isRdmVidLoading ? <div className='loading-icon'></div> : <>Upload Video <ion-icon name="cloud-upload-outline"></ion-icon></>}
+                    </button>
+                    <p>or</p>
+                    <button className='other-btn' onClick={(e) => generateRandomVid(e)}> 
+                      {isRdmVidLoading ? <div className='loading-icon'></div> : <>Generate random <ion-icon name="shuffle-outline"></ion-icon></>}
+                    </button>
+                  </>
+                }
               </div>
 
-              <h3>Select Reference video</h3>
-              <button className="other-btn upld-btn genbtn" onClick={() => refVideoInputRef.current.click()}>
-                {isRdmVidLoading ? <div className='loading-icon'></div> : <>Upload Video <ion-icon name="cloud-upload-outline"></ion-icon></>}
-              </button>
-              <p>or</p>
-              <button className='other-btn' onClick={(e) => generateRandomVid(e)}> 
-                {isRdmVidLoading ? <div className='loading-icon'></div> : <>Generate random <ion-icon name="shuffle-outline"></ion-icon></>}
-              </button>
+              
             </div>
           </div>
         </div>
