@@ -57,7 +57,7 @@ function Edit_img_page() {
   const handleFileUploadToPinata = async (file) => {
     setIsImgFileLoading(true);
     try {
-      // const upload = await pinata.upload.file(file);
+      const upload = await pinata.upload.file(file);
       console.log(upload);
 
       // Create a signed URL for the uploaded file that expires after 30 minutes
