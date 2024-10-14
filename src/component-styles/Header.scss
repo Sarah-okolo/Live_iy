@@ -58,3 +58,31 @@ header {
 .slide {
   transform: translateX(100%);
 }
+
+
+@media screen and (max-width: 600px) {
+  #logo {
+    display: flex;
+    text-decoration: none;
+    color: var(--text-color);
+  
+    img {
+      width: 49px;
+      object-fit: contain;
+      aspect-ratio: 1/1;
+  
+    }
+  
+    #logo-name {
+      font-size: 1.4rem;
+      font-weight: 900;
+      margin: auto 0;
+      text-align: center;
+    }
+  }
+
+  #theme-toggle-btn {
+    width: 45px;
+    height: 25px;
+  }
+}

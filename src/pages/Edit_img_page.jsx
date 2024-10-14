@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import '../component-styles/Edit_img_page.scss';
 import { PinataSDK } from "pinata";
+import { s } from 'framer-motion/client';
 
 
 function Edit_img_page() {
@@ -102,7 +103,7 @@ function Edit_img_page() {
 
   useEffect(() => {
     if (uploadedImgUrl) {
-      imageFileDisplay.current.src = uploadedImgUrl;
+      imageFileDisplay.current.src = URL.createObjectURL(fileData);
       imageFileDisplay.current.alt = fileData.name;
     }
   }, [uploadedImgUrl]);
@@ -175,9 +176,9 @@ function Edit_img_page() {
 
   // Generates the live image from the static image and reference video file urls using the Segmind API
   const generateLiveImage = async () => {
+    alertBox.current.classList.remove('reveal');
     if (uploadedImgUrl && uploadedRefVideoUrl) {
       generatingLoaderRef.current.style.display = 'block';
-      alertBox.current.classList.remove('reveal');
       try {
         // Converts the static image to base64
         async function toB64(imgUrl) {
@@ -237,6 +238,9 @@ function Edit_img_page() {
       alertBox.current.innerHTML = 'Please select a reference video';
       alertBox.current.classList.add('reveal');
       alertBox.current.style.backgroundColor = 'hsl(356, 58%, 52%)';
+      setTimeout(() => {
+        alertBox.current.classList.remove('reveal');
+      }, 4000);
     }
   };
 
@@ -286,7 +290,7 @@ function Edit_img_page() {
     if (uploadedRefVideoUrl) {
       console.log(uploadedRefVideoUrl);
       // Display the reference video only after it has been uploaded
-      refvideoRef.current.src = uploadedRefVideoUrl;
+      refvideoRef.current.src = URL.createObjectURL(refVideoData);
       refVidContRef.current.style.display = 'block';
       setIsRdmVidLoading(false);
     }
