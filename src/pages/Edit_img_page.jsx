@@ -49,13 +49,6 @@ function Edit_img_page() {
     setFileData(event.target.files[0]); // Store the selected file in state
   };
 
-  // Pinata SDK
-  const pinata = new PinataSDK({
-    pinataJwt: import.meta.env.VITE_PINATA_JWT,
-    pinataGateway: import.meta.env.VITE_PINATA_GATEWAY,
-  });
-
-
   useEffect(() => {
     alertBox.current.classList.remove('reveal');
     const uploadFile = async () => {
@@ -123,6 +116,12 @@ function Edit_img_page() {
       dropBox.removeEventListener('dragstart', handleDragStart); // Clean up dragstart listener
     };
   }, []);
+
+  // Pinata SDK
+  const pinata = new PinataSDK({
+    pinataJwt: import.meta.env.VITE_PINATA_JWT,
+    pinataGateway: import.meta.env.VITE_PINATA_GATEWAY,
+  });
 
   // Handles uploading of files to Pinata
   const handleFileUploadToPinata = async (file) => {
