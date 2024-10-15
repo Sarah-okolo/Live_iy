@@ -218,7 +218,7 @@ function Edit_img_page() {
           if (response.status === 500) {
             throw new Error('Face not detected<br/>(Ensure files have a clear face)');
           }
-          throw new Error(`Error: ${response.statusText}`);
+          throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
         
         const result = await response.blob();
