@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import '../component-styles/Edit_img_page.scss';
 import { PinataSDK } from "pinata";
-import { s } from 'framer-motion/client';
+import { i, p, s, u } from 'framer-motion/client';
 
 
 function Edit_img_page() {
@@ -55,40 +55,6 @@ function Edit_img_page() {
     pinataGateway: import.meta.env.VITE_PINATA_GATEWAY,
   });
 
-  // Handles uploading of files to Pinata
-  const handleFileUploadToPinata = async (file) => {
-    setIsImgFileLoading(true);
-    try {
-      const upload = await pinata.upload.file(file);
-      // Create a signed URL for the uploaded file that expires after 30 minutes
-      const signedUrl = await pinata.gateways.createSignedURL({
-        cid: upload.cid,
-        expires: 1800
-      })
-      const CID = signedUrl;
-      console.log(CID)
-
-      alertBox.current.innerHTML = 'File uploaded';
-      alertBox.current.classList.add('reveal');
-      alertBox.current.style.backgroundColor = 'hsl(163, 72%, 41%)';
-      setTimeout(() => {
-        alertBox.current.classList.remove('reveal');
-      }, 4000);
-      setIsImgFileLoading(false);
-      setIsRdmVidLoading(false);
-      uploadContainerRef.current.style.display = 'none';
-
-      return CID;
-    } 
-    catch (error) {
-      alertBox.current.innerHTML = error.message ? error.message : `An error occured<br/>(Please try again)`;
-      alertBox.current.classList.add('reveal');
-      alertBox.current.style.backgroundColor = 'hsl(356, 58%, 52%)';
-      console.log(error)
-      setIsImgFileLoading(false);
-      setIsRdmVidLoading(false);
-    }
-  }
 
   useEffect(() => {
     alertBox.current.classList.remove('reveal');
@@ -158,9 +124,40 @@ function Edit_img_page() {
     };
   }, []);
 
+  // Handles uploading of files to Pinata
+  const handleFileUploadToPinata = async (file) => {
+    setIsImgFileLoading(true);
+    try {
+      const upload = await pinata.upload.file(file);
+      // Create a signed URL for the uploaded file that expires after 30 minutes
+      const signedUrl = await pinata.gateways.createSignedURL({
+        cid: upload.cid,
+        expires: 1800
+      })
+      const CID = signedUrl;
+      console.log(CID)
 
+      alertBox.current.innerHTML = 'File uploaded';
+      alertBox.current.classList.add('reveal');
+      alertBox.current.style.backgroundColor = 'hsl(163, 72%, 41%)';
+      setTimeout(() => {
+        alertBox.current.classList.remove('reveal');
+      }, 4000);
+      setIsImgFileLoading(false);
+      setIsRdmVidLoading(false);
+      uploadContainerRef.current.style.display = 'none';
 
-
+      return CID;
+    } 
+    catch (error) {
+      alertBox.current.innerHTML = error.message ? error.message : `An error occured<br/>(Please try again)`;
+      alertBox.current.classList.add('reveal');
+      alertBox.current.style.backgroundColor = 'hsl(356, 58%, 52%)';
+      console.log(error)
+      setIsImgFileLoading(false);
+      setIsRdmVidLoading(false);
+    }
+  }
 
   // Segmind API
   const segmind_api_key = import.meta.env.VITE_SEGMIND_API_KEY;
@@ -192,10 +189,15 @@ function Edit_img_page() {
           });
         }
 
-        const faceImageBase64 = await toB64(uploadedImgUrl);
+
+        // Proxy the pinata files url to my node server to avoid CORS issues
+        const videoProxyUrl = `https://live-iy-node-server.vercel.app/proxy-file?url=${encodeURIComponent(uploadedRefVideoUrl)}`;
+        const imageProxyUrl = `https://live-iy-node-server.vercel.app/proxy-file?url=${encodeURIComponent(uploadedImgUrl)}`;
+        const faceImageBase64 = await toB64(imageProxyUrl);
+
         const data = {
-          "face_image":  faceImageBase64,
-          "driving_video": uploadedRefVideoUrl,
+          "face_image": faceImageBase64,
+          "driving_video": videoProxyUrl,
           "live_portrait_dsize": 512,
           "live_portrait_scale": 2.3,
           "video_frame_load_cap": 128,
@@ -224,8 +226,6 @@ function Edit_img_page() {
         setLivePortraitData(result);
         console.log(result);
         generatingLoaderRef.current.style.display = 'none';
-
-        // TODO: Logic to turn image into GIF
 
       } catch (error) {
         alertBox.current.innerHTML = error.message ? error.message : `An error occured<br/>(Try again later)`;
